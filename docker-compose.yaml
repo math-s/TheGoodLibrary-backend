@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  localstack:
+    image: localstack/localstack
+    environment:
+      - SERVICES=lambda,sqs,s3,dynamodb
+      - DEBUG=0
+      - PERSISTENCE=1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - LOG_LEVEL=debug
+    ports:
+      - "4566:4566"
+      - "4571:4571"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
+    networks:
+      - localstack_network
+    command: >
+      sh -c '
+        /usr/bin/localstack start;
+      '
+
+networks:
+  localstack_network:
+    driver: bridge
