@@ -8,11 +8,6 @@ provider "aws" {
 
 }
 
-# create S3 bucket
-resource "aws_s3_bucket" "my_bucket" {
-  bucket = "my-bucket"
-}
-
 # create SQS queue
 resource "aws_sqs_queue" "process-book-queue" {
   name = "process-book-queue"
@@ -21,26 +16,29 @@ resource "aws_sqs_queue" "process-book-queue" {
 # create Lambda function
 resource "aws_lambda_function" "book-service" {
   function_name = "book-service"
+  package_type  = "Image"
+  role          = aws_iam_role.my_role.arn
   handler       = "index.handler"
   runtime       = "python3.11"
-  role          = aws_iam_role.my_role.arn
-  image_uri     = "${var.docker_host_url}/book-service:${var.docker_image_tag}"
+  image_uri     = "747334718413.dkr.ecr.us-east-1.amazonaws.com/book-service:9933af6e8c05fbf"
 }
 
 resource "aws_lambda_function" "book-worker" {
   function_name = "book-worker"
+  package_type  = "Image"
+  role          = aws_iam_role.my_role.arn
   handler       = "index.handler"
   runtime       = "python3.11"
-  role          = aws_iam_role.my_role.arn
-  image_uri     = "${var.docker_host_url}/book-worker:${var.docker_image_tag}"
+  image_uri     = "747334718413.dkr.ecr.us-east-1.amazonaws.com/book-worker:9933af6e8c05fbf"
 }
 
 resource "aws_lambda_function" "publishing-service" {
   function_name = "publishing-service"
+  package_type  = "Image"
+  role          = aws_iam_role.my_role.arn
   handler       = "index.handler"
   runtime       = "python3.11"
-  role          = aws_iam_role.my_role.arn
-  image_uri     = "${var.docker_host_url}/publishing-service:${var.docker_image_tag}"
+  image_uri     = "747334718413.dkr.ecr.us-east-1.amazonaws.com/publishing-service:9933af6e8c05fbf"
 }
 
 # create IAM role for Lambda function
@@ -74,7 +72,9 @@ resource "aws_iam_policy" "my_policy" {
           "s3:PutObject",
           "sqs:SendMessage",
           "dynamodb:GetItem",
-          "dynamodb:PutItem"
+          "dynamodb:PutItem",
+          "dynamodb:UpdateItem",
+          "dynamodb:DeleteItem",
         ]
         Effect = "Allow"
         Resource = [

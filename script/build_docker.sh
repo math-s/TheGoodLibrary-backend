@@ -14,8 +14,8 @@ function create_lambda_docker_image() {
         cd ../src/$lambda_name
         TAG_ID=$(git rev-parse HEAD | cut -c1-15)
         IMAGE_ID=$(docker build --platform linux/amd64 -t $lambda_name:$TAG_ID --quiet . --no-cache | cut -d':' -f2)
-        echo $IMAGE_ID
         tag_push_docker_image $IMAGE_ID $lambda_name $TAG_ID
+        echo 'lambda: '$lambda_name' tag: '$TAG_ID' image_id: '$IMAGE_ID''
     )
 }
 

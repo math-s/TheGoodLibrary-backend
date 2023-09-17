@@ -21,5 +21,9 @@ variable "skip_requesting_account_id" {
 }
 
 variable "docker_image_tag" {
-  default = "latest"
+  default = "9933af6e8c05fbf"
+}
+
+variable "docker_host_url" {
+  default="747334718413.dkr.ecr.us-east-1.amazonaws.com"
 }
