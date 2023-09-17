@@ -14,15 +14,12 @@ FROM base as testing
 
 COPY tests/ ${LAMBDA_TASK_ROOT}/tests
 
-RUN pip install -r requirements-dev.txt
+COPY requirements-dev.txt ${LAMBDA_TASK_ROOT}
 
-RUN coverage run -m pytest -vvs --junitxml=/report.xml
-RUN coverage xml -o /coverage.xml -i
+RUN pip install -r requirements-dev.txt
+RUN pip install pytest
 
 FROM base as final
-
-COPY --from=testing /coverage.xml /
-COPY --from=testing /report.xml /
 
 # Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)
 CMD [ "lambda_function.handler" ]
