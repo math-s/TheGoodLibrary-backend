@@ -216,4 +216,5 @@ override.tf.json
 terraform.rc
 
 *.zip
+tempdir/
 # End of https://www.toptal.com/developers/gitignore/api/python,terraform,localstack
