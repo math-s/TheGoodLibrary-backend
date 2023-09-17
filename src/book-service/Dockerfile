@@ -21,7 +21,5 @@ RUN pip install pytest
 
 FROM base as final
 
-COPY --from=testing /report.xml /
-
 # Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)
 CMD [ "lambda_function.handler" ]
