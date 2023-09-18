@@ -22,4 +22,4 @@ RUN pip install pytest
 FROM base as final
 
 # Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)
-CMD [ "app.handler" ]
+CMD [ "app.lambda_handler" ]
