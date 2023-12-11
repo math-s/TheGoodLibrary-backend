@@ -8,7 +8,8 @@
             "module": "uvicorn",
             "args": [
                 "main:app",
-                "--reload"
+                "--reload",
+                "--log-config=../log_conf.yaml"
             ],
             "jinja": true,
             "justMyCode": true
