@@ -30,10 +30,6 @@ variable "docker_image_tag" {
   default = "4c03f4e56e58c50"
 }
 
-variable "docker_host_url" {
-  default = "747334718413.dkr.ecr.us-east-1.amazonaws.com"
-}
-
 variable "lambdas" {
   type    = list(string)
   default = ["book-service", "book-worker", "publishing-service"]

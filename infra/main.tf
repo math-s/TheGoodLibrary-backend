@@ -17,14 +17,6 @@ provider "aws" {
   skip_requesting_account_id  = var.skip_requesting_account_id
 }
 
-# create SQS queue
-resource "aws_sqs_queue" "process-book-queue" {
-  name = "process-book-queue"
-  tags = {
-    Name : "process-book-queue",
-    Type : "Queue"
-  }
-}
 
 resource "aws_iam_role" "lambda-role" {
   name = "lambda-role"
