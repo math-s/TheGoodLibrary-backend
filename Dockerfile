@@ -1,17 +1,20 @@
-FROM python:3.11-slim AS BASE
+FROM python:3.11-slim AS base
 
-COPY src/ /app
+COPY src /app
 WORKDIR /app
 
-FROM BASE AS QUALITY
+FROM base AS quality
+COPY requirements.txt .
+COPY requirements-dev.txt .
 RUN pip install -r requirements.txt
 RUN pip install -r requirements-dev.txt
 RUN python3 -m coverage run --source=. --omit=tests/* -m unittest discover
 RUN coverage report --show-missing
 
 
-FROM BASE AS PROD
+FROM base AS prod
 RUN rm -Rf /app/tests
+COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 EXPOSE 8000
