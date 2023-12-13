@@ -1,0 +1,22 @@
+name: Deploy stage
+env:
+    DOCKER_REGISTRY: 747334718413.dkr.ecr.us-east-1.amazonaws.com
+run-name: a
+on:
+    push:
+        branches:
+            - main
+
+    pull_request:
+        branches:
+            - main
+jobs:
+    quality_check:
+        name: Quality Test
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout the repo
+              uses: actions/checkout@v2
+
+            - name: Run unit tests
+              run: make quality-check
