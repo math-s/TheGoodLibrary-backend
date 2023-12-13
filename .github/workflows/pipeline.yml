@@ -1,7 +1,7 @@
 name: Deploy stage
 env:
-    DOCKER_REGISTRY: 747334718413.dkr.ecr.us-east-1.amazonaws.com
-run-name: a
+    DOCKER_REGISTRY: 747334718413.dkr.ecr.us-east-1.amazonaws.com/good-library-api
+run-name: Deploy
 on:
     push:
         branches:
