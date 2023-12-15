@@ -1,13 +1,24 @@
 {
     "configurations": [
         {
+            "name": "Shell",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/app/main.py",
+            "console": "integratedTerminal",
+            "args": [
+                "-i"
+            ],
+            "justMyCode": true
+        },
+        {
             "name": "API",
             "type": "python",
             "request": "launch",
             "cwd": "${workspaceFolder}/src",
             "module": "uvicorn",
             "args": [
-                "main:app",
+                "app.main:app",
                 "--reload",
                 "--log-config=../log_conf.yaml"
             ],
