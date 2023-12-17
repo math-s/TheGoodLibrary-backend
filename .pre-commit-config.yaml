@@ -20,4 +20,4 @@ repos:
     rev: 22.3.0
     hooks:
       - id: black
-        entry: bash -c "cd server && black src --check"
+        entry: bash -c "cd src && black app --check"

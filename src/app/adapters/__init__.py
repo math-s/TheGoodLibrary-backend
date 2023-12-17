@@ -1,0 +1,2 @@
+from .authors_dynamodb import DynamoDBAuthorRepository
+from .books_dynamodb import DynamoDBBookRepository
