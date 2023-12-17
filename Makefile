@@ -6,3 +6,6 @@ build-api:
 
 run:
 	docker run --name good-library --detach good-library
+
+lint:
+	cd src && black app
