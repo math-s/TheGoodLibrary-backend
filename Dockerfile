@@ -8,7 +8,7 @@ COPY requirements.txt .
 COPY requirements-dev.txt .
 RUN pip install -r requirements.txt
 RUN pip install -r requirements-dev.txt
-RUN python3 -m coverage run --source=. --omit=tests/* -m unittest discover
+RUN python3 -m coverage run --source=. --omit=tests/* -m pytest
 RUN coverage report --show-missing
 
 
