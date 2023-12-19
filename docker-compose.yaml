@@ -1,6 +1,17 @@
 version: '3'
 
 services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    networks:
+      - localstack_network
+    volumes:
+      - ./src/app:/app
+
   localstack:
     image: localstack/localstack
     environment:
@@ -9,6 +20,7 @@ services:
       - PERSISTENCE=1
       - DOCKER_HOST=unix:///var/run/docker.sock
       - LOG_LEVEL=debug
+      - DATA_DIR=/tmp/localstack/data
     ports:
       - "4566:4566"
       - "4571:4571"
