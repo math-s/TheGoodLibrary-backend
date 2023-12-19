@@ -3,30 +3,34 @@ import logging
 from typing import Dict, List, Tuple
 
 from app.adapters.authors_dynamodb import DynamoDBAuthorRepository
-from app.domain.authors import Author, get_authors, get_authors_by_name, create_author
+from app.domain.authors import Author, get_authors, create_author
 from app.routers.schemas import AuthorPayload
 
 logger = logging.getLogger(__name__)
 
 
-def fetch_authors(cursor: str, page_size: int) -> Tuple[List[Author], str]:
+def fetch_authors(
+    cursor: str, page_size: int, name: str = None
+) -> Tuple[List[Author], str]:
     logger.info("Fetching authors")
 
     authors, next_page_cursor = get_authors(
-        cursor=cursor, page_size=page_size, using_repository=DynamoDBAuthorRepository()
+        cursor=cursor,
+        page_size=page_size,
+        name=name,
+        using_repository=DynamoDBAuthorRepository(),
     )
 
     return authors, next_page_cursor
 
 
-def filter_authors_by_name(name: str, page: int, page_size: int):
+def filter_authors_by_name(
+    cursor: str, page_size: int, name: str
+) -> Tuple[List[Author], str]:
     logger.info("Filtering authors by name")
 
-    authors = get_authors_by_name(
-        name=name,
-        page=page,
-        page_size=page_size,
-        using_repository=DynamoDBAuthorRepository(),
+    authors, next_page_cursor = get_authors(
+        cursor=cursor, page_size=page_size, using_repository=DynamoDBAuthorRepository()
     )
 
     return authors

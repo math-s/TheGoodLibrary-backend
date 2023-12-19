@@ -1,11 +1,11 @@
+import logging
+
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from mangum import Mangum
 
 from app.routers.authors import router as authors_router
-from mangum import Mangum
-import traceback
-import logging
 
 logger = logging.getLogger(__name__)
 

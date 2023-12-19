@@ -15,9 +15,12 @@ class Author:
     # TODO: add lib pycountry to validate country and language
 
     def __post_init__(self) -> None:
-        self.birth_date = (
-            datetime.fromisoformat(self.birth_date).date() if self.birth_date else None
-        )
+        if self.birth_date.__class__ == str:
+            self.birth_date = (
+                datetime.fromisoformat(self.birth_date).date()
+                if self.birth_date
+                else None
+            )
 
     @property
     def first_name(self) -> str:
@@ -45,7 +48,7 @@ class AuthorRepository(ABC):
     """
 
     def get_paginated_authors(
-        self, cursor: int, limit: int
+        self, cursor: str, limit: int, name: str = None
     ) -> Tuple[List[Author], str]:
         raise NotImplementedError()
 
@@ -61,18 +64,13 @@ class AuthorRepository(ABC):
     def delete_author(self, id: int) -> None:
         raise NotImplementedError()
 
-    def get_author_by_name(self, name: str, cursor: int, limit: int) -> List[Author]:
-        raise NotImplementedError()
-
 
 def get_authors(
-    cursor: str, page_size: int, using_repository: Type[AuthorRepository]
+    cursor: str, page_size: int, name: str, using_repository: Type[AuthorRepository]
 ) -> Tuple[List[Author], str]:
-    return using_repository.get_paginated_authors(cursor=cursor, limit=page_size)
-
-
-def get_authors_by_name(name: str, using_repository: AuthorRepository) -> List[Author]:
-    return using_repository.get_author_by_name(name)
+    return using_repository.get_paginated_authors(
+        cursor=cursor, limit=page_size, name=name
+    )
 
 
 def create_author(author: Author, using_repository: AuthorRepository) -> Author:

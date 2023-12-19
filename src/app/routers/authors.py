@@ -13,7 +13,7 @@ router = APIRouter(prefix="/authors", tags=["authors"])
 def fetch_authors(cursor: str = None, page_size: int = 10, name: str = None):
     # TODO: breaking for invalid cursor
     authors, next_page_cursor = fetch_authors_service(
-        cursor=cursor, page_size=page_size
+        cursor=cursor, page_size=page_size, name=name
     )
 
     return {

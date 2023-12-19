@@ -1,7 +1,9 @@
-from typing import List, Tuple
-from app.domain.authors import Author, AuthorRepository
-from .dynamodb import BaseDynamoRepository, handle_dynamodb_client_error
 import base64
+from typing import List, Tuple
+
+from app.domain.authors import Author, AuthorRepository
+
+from .dynamodb import BaseDynamoRepository, handle_dynamodb_client_error
 
 
 class DynamoDBAuthorRepository(AuthorRepository, BaseDynamoRepository):
@@ -9,15 +11,27 @@ class DynamoDBAuthorRepository(AuthorRepository, BaseDynamoRepository):
 
     @handle_dynamodb_client_error()
     def get_paginated_authors(
-        self, cursor: str, limit: int
+        self, cursor: str, limit: int, name: str = None
     ) -> Tuple[List[Author], str]:
+        # TODO: add constraint to name length for performance ?? O(m*n)
+        author_name = name
+        kwargs_filter = {}
+
         if cursor:
-            data = self.table.scan(
-                ExclusiveStartKey={"name": base64.b64decode(cursor).decode()},
-                Limit=limit,
-            )
+            kwargs_filter["ExclusiveStartKey"] = {
+                "name": base64.b64decode(cursor).decode()
+            }
+
+        if author_name:
+            kwargs_filter["FilterExpression"] = "contains(#n, :author_name)"
+            kwargs_filter["ExpressionAttributeNames"] = {"#n": "name"}
+            kwargs_filter["ExpressionAttributeValues"] = {":author_name": author_name}
+            kwargs_filter["Limit"] = limit
+
+        if "KeyConditionExpression" in kwargs_filter:
+            data = self.table.query(**kwargs_filter)
         else:
-            data = self.table.scan(Limit=limit)
+            data = self.table.scan(**kwargs_filter)
 
         last_key = data.get("LastEvaluatedKey", None)
 
@@ -44,7 +58,4 @@ class DynamoDBAuthorRepository(AuthorRepository, BaseDynamoRepository):
         raise NotImplementedError()
 
     def delete_author(self, id: int) -> None:
-        raise NotImplementedError()
-
-    def get_author_by_name(self, name: str, cursor: int, limit: int) -> List[Author]:
         raise NotImplementedError()
