@@ -1,0 +1,1 @@
+from .test_authors_dynamodb import DynamoDBAuthorRepository

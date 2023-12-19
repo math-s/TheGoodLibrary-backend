@@ -41,16 +41,6 @@ class DynamoDBAuthorRepository(AuthorRepository, BaseDynamoRepository):
         return [Author(**info) for info in data["Items"]], new_cursor
 
     @handle_dynamodb_client_error()
-    def get_author_by_id(self, id: int) -> Author:
-        data = self.table.get_item(
-            Key={
-                "name": id,
-            }
-        )
-
-        return Author(**data.get("Item", {}))
-
-    @handle_dynamodb_client_error()
     def create_author(self, author: Author) -> None:
         self.table.put_item(Item=author.as_dict)
 
