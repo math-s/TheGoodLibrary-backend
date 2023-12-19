@@ -1,5 +1,5 @@
 quality-check:
-	docker build . -t good-library --target quality --progress=plain
+	docker build . -t good-library --target quality --progress=plain --no-cache
 
 build-api:
 	docker build . -t good-library --target prod --progress=plain

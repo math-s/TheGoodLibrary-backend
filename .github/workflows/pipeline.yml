@@ -1,7 +1,7 @@
-name: Deploy stage
+name: Deploy
 env:
     DOCKER_REGISTRY: 747334718413.dkr.ecr.us-east-1.amazonaws.com/good-library-api
-run-name: Deploy
+run-name: Deploy @${{ github.actor }}
 on:
     push:
         branches:
@@ -20,3 +20,68 @@ jobs:
 
             - name: Run unit tests
               run: make quality-check
+
+    infra_test:
+        name: Infra Test
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout the repo
+              uses: actions/checkout@v2
+            - name: Setup Terraform
+              uses: hashicorp/setup-terraform@v2
+              with:
+                terraform_version: 1.2.5
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v1
+              with:
+                aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                aws-region: us-east-1
+            - name: Run Checks
+              run: |
+                  cd infra/
+                  terraform init
+                  terraform workspace select dev
+                  terraform fmt -check
+                  terraform validate -no-color
+
+    server_deploy:
+      name: Server Deploy
+      runs-on: ubuntu-latest
+      needs: [quality_check, infra_test]
+      if: github.ref == 'refs/heads/main'
+      steps:
+        - name: Checkout the repo
+          uses: actions/checkout@v2
+
+        - name: Configure AWS Credentials
+          uses: aws-actions/configure-aws-credentials@v1
+          with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: us-east-1
+
+        - name: Login to Amazon ECR
+          id: login-ecr
+          uses: aws-actions/amazon-ecr-login@v1
+
+        - name: Add image tag
+          run: echo "IMAGE_TAG=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+
+        - name: Build and push container to Amazon ECR
+          run: |
+            docker build -t $DOCKER_REGISTRY:$IMAGE_TAG .
+            docker push $DOCKER_REGISTRY:$IMAGE_TAG
+            echo "TF_VAR_lambda_image_uri=$DOCKER_REGISTRY:$IMAGE_TAG" >> $GITHUB_ENV
+
+        - name: Setup Terraform
+          uses: hashicorp/setup-terraform@v2
+          with:
+            terraform_version: 1.2.5
+
+        - name: Apply Terraform
+          run: |
+            cd infra/
+            terraform init
+            terraform workspace select dev
+            terraform apply --auto-approve

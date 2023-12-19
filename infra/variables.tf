@@ -26,11 +26,7 @@ variable "skip_requesting_account_id" {
   default = false
 }
 
-variable "docker_image_tag" {
-  default = "4c03f4e56e58c50"
-}
-
 variable "lambdas" {
   type    = list(string)
-  default = ["book-service", "book-worker", "publishing-service"]
+  default = ["good-library-api"]
 }

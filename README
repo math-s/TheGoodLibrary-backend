@@ -1,0 +1,4 @@
+To run the local database:
+
+Run
+    tflocal apply -target=aws_dynamodb_table.authors

@@ -1,3 +1,4 @@
 pytest
 coverage
 pre-commit
+moto[all]
