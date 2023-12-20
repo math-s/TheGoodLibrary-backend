@@ -1,6 +1,5 @@
-from datetime import date
 import logging
-from typing import Dict, List, Tuple
+from typing import List, Tuple
 
 from app.adapters.authors_dynamodb import DynamoDBAuthorRepository
 from app.domain.authors import Author, get_authors, create_author
@@ -33,7 +32,7 @@ def filter_authors_by_name(
         cursor=cursor, page_size=page_size, using_repository=DynamoDBAuthorRepository()
     )
 
-    return authors
+    return authors, next_page_cursor
 
 
 def get_author_by_id(id: int):

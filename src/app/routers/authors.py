@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Security
 
 from app.auth import authenticate
-from app.services.authors import fetch_authors as fetch_authors_service
-from app.services.authors import get_or_create_author as get_or_create_author
+from app.use_cases.authors import fetch_authors as fetch_authors_service
+from app.use_cases.authors import get_or_create_author as get_or_create_author
 from app.routers.schemas import PaginatedAuthor, AuthorPayload
 
 
@@ -25,5 +25,4 @@ def fetch_authors(cursor: str = None, page_size: int = 10, name: str = None):
 @router.post("/")
 def create_author(payload: AuthorPayload, api_key: str = Security(authenticate)):
     get_or_create_author(payload)
-
     return {"message": "Author created."}
