@@ -4,15 +4,15 @@ from typing import Dict
 from dataclasses import dataclass
 from typing import List, Type, Tuple
 from datetime import datetime
+from pycountry import countries, ExistingCountries
 
 
 @dataclass
 class Author:
     name: str
     birth_date: date
-    country: str
+    country: ExistingCountries
     language: str
-    # TODO: add lib pycountry to validate country and language
 
     def __post_init__(self) -> None:
         if self.birth_date.__class__ == str:
@@ -21,6 +21,14 @@ class Author:
                 if self.birth_date
                 else None
             )
+        if self.country:
+            try:
+                if len(self.country) == 2:
+                    self.country = countries.get(alpha_2=self.country)
+                elif len(self.country) == 3:
+                    self.country = countries.get(alpha_3=self.country)
+            except LookupError:
+                self.country = None
 
     @property
     def first_name(self) -> str:
@@ -36,7 +44,22 @@ class Author:
         return {
             "name": self.name,
             "birth_date": self.birth_date.isoformat() if self.birth_date else None,
-            "country": self.country,
+            "country": self.country.alpha_3 if self.country else None,
+            "language": self.language,
+        }
+
+    @property
+    def to_representation(self) -> Dict:
+        return {
+            "name": self.name,
+            "birth_date": self.birth_date.isoformat() if self.birth_date else None,
+            "country": {
+                "name": self.country.name,
+                "alpha_3": self.country.alpha_3,
+                "flag": self.country.flag,
+            }
+            if self.country
+            else None,
             "language": self.language,
         }
 

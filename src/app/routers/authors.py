@@ -17,7 +17,7 @@ def fetch_authors(cursor: str = None, page_size: int = 10, name: str = None):
     )
 
     return {
-        "authors": [author.as_dict for author in authors],
+        "authors": [author.to_representation for author in authors],
         "next_page_cursor": next_page_cursor,
     }
 

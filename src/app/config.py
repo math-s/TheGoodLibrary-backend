@@ -1,5 +1,6 @@
 import logging
-import os
+
+from prettyconf import config
 
 
 logger = logging.getLogger(__name__)
@@ -7,11 +8,11 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
+LOG_LEVEL = config("LOG_LEVEL")
 
-AWS_SECRET_ID = os.getenv("AWS_SECRET_ID", "000000000")
-AWS_ACCESS_KEY = os.getenv("AWS_ACCESS_KEY", "000000000")
-AWS_REGION = os.getenv("AWS_REGION", "us-east-1")
-AWS_ENDPOINT_URL = os.getenv("AWS_ENDPOINT_URL", "http://localhost:4566")
+AWS_SECRET_ID = config("AWS_SECRET_ID")
+AWS_ACCESS_KEY = config("AWS_ACCESS_KEY")
+AWS_REGION = config("AWS_REGION")
+AWS_ENDPOINT_URL = config("AWS_ENDPOINT_URL")
 
 API_KEY_HEADER_NAME = "X-API-Key"

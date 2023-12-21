@@ -1,9 +1,15 @@
 import base64
+import logging
+from datetime import datetime
 from typing import List, Tuple
+
+from boto3.dynamodb.conditions import Attr
 
 from app.domain.authors import Author, AuthorRepository
 
 from .dynamodb import BaseDynamoRepository, handle_dynamodb_client_error
+
+logger = logging.getLogger(__name__)
 
 
 class DynamoDBAuthorRepository(AuthorRepository, BaseDynamoRepository):
@@ -26,7 +32,8 @@ class DynamoDBAuthorRepository(AuthorRepository, BaseDynamoRepository):
             kwargs_filter["FilterExpression"] = "contains(#n, :author_name)"
             kwargs_filter["ExpressionAttributeNames"] = {"#n": "name"}
             kwargs_filter["ExpressionAttributeValues"] = {":author_name": author_name}
-            kwargs_filter["Limit"] = limit
+
+        kwargs_filter["Limit"] = limit
 
         if "KeyConditionExpression" in kwargs_filter:
             data = self.table.query(**kwargs_filter)
@@ -41,8 +48,16 @@ class DynamoDBAuthorRepository(AuthorRepository, BaseDynamoRepository):
         return [Author(**info) for info in data["Items"]], new_cursor
 
     @handle_dynamodb_client_error()
-    def create_author(self, author: Author) -> None:
-        self.table.put_item(Item=author.as_dict)
+    def create_author(self, author: Author) -> Author:
+        try:
+            self.table.put_item(
+                Item=author.as_dict,
+                ConditionExpression=Attr("name").ne(author.name),
+            )
+        except Exception as err:
+            logger.warning(f"Error: {err}")
+            return None
+        return author
 
     def update_author(self, id: int, author: Author) -> Author:
         raise NotImplementedError()
