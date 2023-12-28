@@ -5,6 +5,7 @@
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/src/app/main.py",
+            "cwd": "${workspaceFolder}/src",
             "console": "integratedTerminal",
             "args": [
                 "-i"

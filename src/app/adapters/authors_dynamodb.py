@@ -1,11 +1,11 @@
 import base64
 import logging
-from datetime import datetime
 from typing import List, Tuple
 
 from boto3.dynamodb.conditions import Attr
 
-from app.domain.authors import Author, AuthorRepository
+from app.domain.authors import Author
+from app.domain.authors.repository import AuthorRepository
 
 from .dynamodb import BaseDynamoRepository, handle_dynamodb_client_error
 

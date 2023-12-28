@@ -10,7 +10,9 @@ class AuthorPayload(BaseModel):
     name: Annotated[str, StringConstraints(min_length=1, max_length=100)] = None
     birth_date: PastDate = None
     country: Annotated[str, StringConstraints(min_length=2, max_length=3)] = None
-    language: Annotated[str, StringConstraints(min_length=1, max_length=30)] = None
+    languages: List[
+        Annotated[str, StringConstraints(min_length=1, max_length=30)]
+    ] = None
 
 
 class PaginatedAuthor(BaseModel):

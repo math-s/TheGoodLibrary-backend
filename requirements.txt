@@ -29,3 +29,5 @@ uvicorn==0.24.0.post1
 virtualenv==20.25.0
 PyYAML>=6.0
 aws-lambda-powertools
+prettyconf
+pycountry

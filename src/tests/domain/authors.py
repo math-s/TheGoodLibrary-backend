@@ -11,8 +11,8 @@ class Author:
     name: str
     birth_date: date
     country: str
-    language: str
-    # TODO: add lib pycountry to validate country and language
+    languages: str
+    # TODO: add lib pycountry to validate country and languages
 
     def __post_init__(self) -> None:
         if self.birth_date.__class__ == str:
@@ -37,7 +37,7 @@ class Author:
             "name": self.name,
             "birth_date": self.birth_date.isoformat() if self.birth_date else None,
             "country": self.country,
-            "language": self.language,
+            "languages": self.languages,
         }
 
 

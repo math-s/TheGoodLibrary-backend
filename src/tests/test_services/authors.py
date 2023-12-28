@@ -53,7 +53,7 @@ def get_or_create_author(payload: AuthorPayload) -> Author:
         name=payload.name,
         birth_date=payload.birth_date,
         country=payload.country,
-        language=payload.language,
+        languages=payload.languages,
     )
 
     create_author(author=author, using_repository=DynamoDBAuthorRepository())

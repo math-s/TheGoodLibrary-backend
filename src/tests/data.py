@@ -1,62 +1,80 @@
+from app.domain.authors.manager import AuthorManager
+
 AUTHORS = [
     {
         "name": "Matheus A",
         "country": "BRA",
-        "language": "Portuguese",
-        "birth_date": "2000-01-01"
+        "languages": ["Portuguese", "Latin"],
+        "birth_date": "2000-01-01",
+        "death_date": None
     },
     {
         "name": "Emily B",
         "country": "USA",
-        "language": "English",
-        "birth_date": "1985-05-12"
+        "languages": ["English", "Latin"],
+        "birth_date": "1985-05-12",
+        "death_date": None
     },
     {
         "name": "Juan C",
         "country": "MEX",
-        "language": "Spanish",
-        "birth_date": "1978-09-23"
+        "languages": ["Spanish", "Latin"],
+        "birth_date": "1978-09-23",
+        "death_date": None
     },
     {
         "name": "Sophie D",
         "country": "FRA",
-        "language": "French",
-        "birth_date": "1992-03-15"
+        "languages": ["French", "Latin"],
+        "birth_date": "1992-03-15",
+        "death_date": None
     },
     {
         "name": "Akio E",
         "country": "JPN",
-        "language": "Japanese",
-        "birth_date": "1980-11-07"
+        "languages": ["Japanese", "Latin"],
+        "birth_date": "1980-11-07",
+        "death_date": None
     },
     {
         "name": "Elena F",
-        "country": "ITA",
-        "language": "Italian",
-        "birth_date": "1972-08-29"
+        "country": None,
+        "languages": ["Italian", "Latin"],
+        "birth_date": "1972-08-29",
+        "death_date": None
     },
     {
         "name": "Ravi G",
         "country": "IND",
-        "language": "Hindi",
-        "birth_date": "1989-06-18"
+        "languages": ["Hindi", "Latin"],
+        "birth_date": "1989-06-18",
+        "death_date": None
     },
     {
         "name": "Luisa H",
         "country": "ESP",
-        "language": "Spanish",
-        "birth_date": "1983-12-04"
+        "languages": ["Spanish"],
+        "birth_date": "1983-12-04",
+        "death_date": None
     },
     {
         "name": "Khaled I",
         "country": "EGY",
-        "language": "Arabic",
-        "birth_date": "1975-04-26"
+        "languages": [],
+        "birth_date": "1975-04-26",
+        "death_date": None
     },
     {
         "name": "Yuki J",
         "country": "JPN",
-        "language": "Japanese",
-        "birth_date": "1995-10-10"
+        "languages": ["Japanese", "Latin"],
+        "birth_date": "1995-10-10",
+        "death_date": None
     }
 ]
+
+
+if __name__ == "__main__":
+
+    for row in AUTHORS:
+        AuthorManager.create_author(**row)
